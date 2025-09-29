@@ -22,9 +22,10 @@ export async function generateSummaryFromOpenAI(pdfText: string) {
       max_tokens: 1500,
     });
     return completion.choices[0].message.content;
-  } catch (error:any) {
-    if(error?.status === 429){
-        throw new Error("RATE_LIMIT_EXCEEDED");
-    } throw error;
+  } catch (error: any) {
+    if (error?.status === 429) {
+      throw new Error("RATE_LIMIT_EXCEEDED");
+    }
+    throw error;
   }
 }
