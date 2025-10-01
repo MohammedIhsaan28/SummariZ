@@ -1,5 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { createUploadthing, type FileRouter  } from "uploadthing/next";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
@@ -13,11 +13,12 @@ export const ourFileRouter = {
 
       return { userId: user.id };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata, file }:any) => {
       console.log("Upload completed for user id", metadata.userId);
       console.log("File url", file.url);
       return { userId: metadata.userId, file };
     }),
 } satisfies FileRouter;
 
-export type FileRouter = typeof ourFileRouter;
+// Rename your local type to avoid conflict
+export type OurFileRouter = typeof ourFileRouter;
