@@ -4,6 +4,8 @@ import Link from "next/link";
 import { FileIcon, FileText } from "lucide-react";
 import { cn, formatFileName } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
+import { MotionDiv } from "../common/motion-wrapper";
+import { itemVariants } from "@/utils/constants";
 
 const SummaryHeader = ({
   fileUrl,
@@ -21,42 +23,61 @@ const SummaryHeader = ({
         <h3 className="text-base xl:text-lg font-semibold text-gray-900 truncate w-4/5 ">
           {title || formatFileName(fileUrl)}
         </h3>
-        <p className="text-sm text-gray-500">{formatDistanceToNow(new Date(createdAt),{addSuffix:true})}</p>
+        <p className="text-sm text-gray-500">
+          {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
+        </p>
       </div>
     </div>
   );
 };
 
-const StatuesBagde=({status}:{status:string})=>{
-    return (
-        <span className={cn('px-3 py-1 text-xs font-medium rounded-full capitalize',status === 'completed' ? 'bg-green-100 text-green-800':'bg-yellow-100 text-yellow-800' )}>{status}</span>
-    )
-}
+const StatuesBagde = ({ status }: { status: string }) => {
+  return (
+    <span
+      className={cn(
+        "px-3 py-1 text-xs font-medium rounded-full capitalize",
+        status === "completed"
+          ? "bg-green-100 text-green-800"
+          : "bg-yellow-100 text-yellow-800"
+      )}
+    >
+      {status}
+    </span>
+  );
+};
 
 export default function SummaryCard({ summary }: { summary: any }) {
   return (
-    <div>
+    <MotionDiv
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{
+        scale: 1.02,
+        transition: { duration: 0.2, ease: "easeOut" },
+      }}
+    >
       <Card className="relative h-full">
         <div className="absolute top-2 right-2">
           <DeleteButton summaryId={summary.id} />
         </div>
         <Link className="block p-4 sm:p-6" href={`summaries/${summary.id}`}>
-        <div className="flex flex-col gap-3 sm:gap-4">
-          <SummaryHeader
-            fileUrl={summary.original_file_url}
-            title={summary.title}
-            createdAt={summary.created_at}
-          />
-          <p className="text-gray-600 line-clamp-2 text-sm sm:text-base pl-2">
-            {summary.summary_text}
-          </p>
-          
-          <div className="flex justify-between items-center mt-2 sm:mt-4">
-            <StatuesBagde status={summary.status}/>
-          </div>
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <SummaryHeader
+              fileUrl={summary.original_file_url}
+              title={summary.title}
+              createdAt={summary.created_at}
+            />
+            <p className="text-gray-600 line-clamp-2 text-sm sm:text-base pl-2">
+              {summary.summary_text}
+            </p>
+
+            <div className="flex justify-between items-center mt-2 sm:mt-4">
+              <StatuesBagde status={summary.status} />
+            </div>
           </div>
         </Link>
       </Card>
-    </div>
+    </MotionDiv>
   );
 }

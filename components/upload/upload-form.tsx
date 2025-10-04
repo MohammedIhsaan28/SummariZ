@@ -3,9 +3,13 @@ import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import UploadFormInput from "./upload-form-input";
 import { z } from "zod";
-import { generatePdfSummary, storePdfSummaryAction } from "@/actions/upload-actions";
+import {
+  generatePdfSummary,
+  storePdfSummaryAction,
+} from "@/actions/upload-actions";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import LoadingSkeleton from "./loading-skeleton";
 
 const schema = z.object({
   file: z
@@ -62,7 +66,7 @@ export default function UploadForm() {
         return;
       }
 
-      const resp:any = await startUpload([file]); // target 
+      const resp: any = await startUpload([file]); // target
       if (!resp) {
         toast.error("No response from server.");
         setIsLoading(false);
@@ -71,51 +75,73 @@ export default function UploadForm() {
 
       toast("File uploaded successfully. Generating summary...");
 
-
-
       const result = await generatePdfSummary(resp);
       console.log({ result });
 
       const { data = null, message = null } = result || {};
       if (data) {
-
-        let storeResult:any; 
+        let storeResult: any;
         toast("Saving PDF...");
-      
-        if (data.summary){
-        storeResult = await storePdfSummaryAction({
-          summary:data.summary,
-          fileUrl:resp[0].serverData.file.url,
-          title:data.title,
-          fileName:file.name
-        });
 
-        toast('PDF summary saved successfully!');
-        formRef.current?.reset();
-        //ToDo:redirect to the summary page
-        router.push(`/summaries/${storeResult.data.id}`);
+        if (data.summary) {
+          storeResult = await storePdfSummaryAction({
+            summary: data.summary,
+            fileUrl: resp[0].serverData.file.url,
+            title: data.title,
+            fileName: file.name,
+          });
 
+          toast("PDF summary saved successfully!");
+          formRef.current?.reset();
+          //ToDo:redirect to the summary page
+          router.push(`/summaries/${storeResult.data.id}`);
+        }
       }
-      }
-      
-
     } catch (error) {
       setIsLoading(false);
       console.error("Error Occured", error);
       formRef.current?.reset();
       toast.error("An error occured. Please try again.");
-    } finally{
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-gray-200 dark:border-gray-800" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-background px-3 text-muted-foreground text-sm">
+            Upload PDF
+          </span>
+        </div>
+      </div>
       <UploadFormInput
         isLoading={isLoading}
         ref={formRef}
         onSubmit={handleSubmit}
       />
+      {isLoading && (
+        <>
+          <div className="relative">
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
+              <div className="w-full border-t border-gray-200 dark:border-gray-800" />
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-background px-3 text-muted-foreground text-sm">
+                Processing
+              </span>
+            </div>
+          </div>
+          <LoadingSkeleton/>
+        </>
+      )}
     </div>
   );
 }
