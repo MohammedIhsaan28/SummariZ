@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📘 AI PDF Summarizer
 
-## Getting Started
+An advanced **AI-powered PDF Summarization Platform** built with **Next.js**, **LangChain**, **GPT-4**, and **Gemini**.  
+It allows users to securely upload PDF files, automatically extract their contents, and generate concise, high-quality summaries — all within a modern, responsive, and beautifully designed UI.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Core Technologies
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Technology | Purpose |
+|-------------|----------|
+| **Next.js 15 (App Router)** | Framework for server-side rendering and full-stack React development |
+| **React 19** | Building interactive and component-driven UIs |
+| **TypeScript** | Static typing for better scalability and maintainability |
+| **Tailwind CSS** | Rapid, responsive styling and consistent design |
+| **shadcn/ui** | Elegant prebuilt UI components integrated with Tailwind |
+| **Clerk** | Secure authentication and user management |
+| **UploadThing** | Seamless file uploads and server callbacks |
+| **LangChain** | Chaining and managing LLM (Large Language Model) operations |
+| **OpenAI GPT-4 / Gemini API** | Generating natural summaries and insights from documents |
+| **NeonDB (PostgreSQL)** | Serverless database for structured summary and user data |
+| **Stripe** | Subscription management and payment integration |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Application Features
 
-## Learn More
+### 🔐 Authentication & Access Control
+- Secure sign-in and user management powered by **Clerk**  
+- Role-based protected routes for **upload**, **dashboard**, and **summaries**
 
-To learn more about Next.js, take a look at the following resources:
+### 📤 Smart File Uploads
+- Upload PDFs seamlessly via **UploadThing**  
+- Automatic parsing of text and metadata  
+- Handles large files efficiently
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🧠 AI Summarization Engine
+- Utilizes **LangChain** to orchestrate **GPT-4** and **Gemini** models  
+- Extracts and summarizes complex PDF documents  
+- Provides concise summaries and key insights in seconds
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 💾 Database & History
+- Stores user summaries and metadata in **NeonDB (PostgreSQL)**  
+- Users can view and revisit previous summaries anytime
 
-## Deploy on Vercel
+### 💳 Premium Features
+- Integrated **Stripe** billing system for premium summarization plans  
+- Secure checkout and subscription management
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 💎 Beautiful, Responsive UI
+- Built with **Tailwind CSS** and **shadcn/ui**  
+- Fully responsive design for **mobile**, **tablet**, and **desktop**  
+- Smooth animations using **Framer Motion**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+
+
