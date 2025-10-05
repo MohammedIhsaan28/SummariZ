@@ -1,14 +1,12 @@
 "use server";
 
 import { getDbConnection } from "@/lib/db";
-import { generateSummaryFromGeminiAI } from "@/lib/geminiai";
 import { fetchAndExtractPdfText } from "@/lib/langChain";
-import { generateSummaryFromOpenAI } from "@/lib/openai";
-import { formatFileNameAsTitle } from "@/utils/format-utils";
+import { generateSummaryFromGeminiAI } from "@/lib/geminiai";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-interface pdfSummaryType {
+interface PdfSummaryType {
   userId?: string;
   fileUrl: string;
   summary: string;
@@ -16,171 +14,51 @@ interface pdfSummaryType {
   fileName: string;
 }
 
-export async function generatePdfText({
-  fileUrl,
-  
-}: {
-  fileUrl: string;
- 
-}) {
-  if (!fileUrl) {
-    return {
-      success: false,
-      message: "File URL is missing",
-      data: null,
-    };
-  }
+export async function generatePdfText({ fileUrl }: { fileUrl: string }) {
+  if (!fileUrl) return { success: false, message: "File URL is missing", data: null };
 
   try {
     const pdfText = await fetchAndExtractPdfText(fileUrl);
-    console.log({ pdfText });
+    if (!pdfText) return { success: false, message: "Failed to extract PDF text", data: null };
 
-    if (!pdfText) {
-      return {
-        success: false,
-        message: "Failed to fetch adn extract PDF text",
-        data: null,
-      };
-    }
-    
-
-    return {
-      success: true,
-      message: "PDF text generated successfully",
-      data: { pdfText }
-    };
+    return { success: true, message: "PDF text generated", data: { pdfText } };
   } catch (error) {
-    return {
-      success: false,
-      message: "Failed to fetch and extract PDF text",
-      data: null,
-    };
+    return { success: false, message: "Error extracting PDF text", data: null };
   }
 }
 
-export async function generatePdfSummary({
-  pdfText,
-  fileName,
-}: {
-  pdfText: string;
-  fileName: string;
-}) {
+export async function generatePdfSummary({ pdfText, fileName }: { pdfText: string; fileName: string }) {
   try {
-    let summary;
-    try {
-      summary = await generateSummaryFromGeminiAI(pdfText); // loo
-      console.log({ summary });
-    } catch (error) {
-      console.log(error);
-      // call gemini
-      if (error instanceof Error && error.message === "RATE_LIMIT_EXCEEDED") {
-        try {
-          summary = await generateSummaryFromGeminiAI(pdfText);
-          console.log({ summary });
-        } catch (geminiError) {
-          console.error(
-            "Gemini Ai failed after OpenAI quota exceeded",
-            geminiError
-          );
-        }
-        throw new Error("Both OpenAI and Gemini AI services failed.");
-      }
-    }
-    
-    if (!summary) {
-      return {
-        success: false,
-        message: "Failed to generate summary",
-        data: null,
-      };
-    }
+    const summary = await generateSummaryFromGeminiAI(pdfText);
+    if (!summary) return { success: false, message: "Failed to generate summary", data: null };
 
-    // Add this return for success!
-    return {
-      success: true,
-      message: "Summary generated successfully",
-      data: { title: fileName, summary },
-    };
+    return { success: true, message: "Summary generated", data: { summary, title: fileName } };
   } catch (error) {
-    return {
-      success: false,
-      message: "Failed to generate summary",
-      data: null,
-    };
-  }
-}
-async function savePdfSummary({
-  userId,
-  fileUrl,
-  summary,
-  title,
-  fileName,
-}: pdfSummaryType) {
-  try {
-    const sql = await getDbConnection();
-    const [savedSummary] = await sql`INSERT INTO pdf_summaries (
-        user_id,
-        original_file_url,
-        summary_text,
-        title,
-        file_name
-        ) VALUES(
-         ${userId},
-         ${fileUrl},
-         ${summary},
-         ${title},
-         ${fileName}
-        ) RETURNING id, summary_text`;
-    return savedSummary;
-  } catch (error) {
-    console.error("Error saving PDF summary", error);
-    throw error;
+    return { success: false, message: "Error generating summary", data: null };
   }
 }
 
-export async function storePdfSummaryAction({
-  fileUrl,
-  summary,
-  title,
-  fileName,
-}: pdfSummaryType) {
-  let savedSummary: any;
+async function savePdfSummary({ userId, fileUrl, summary, title, fileName }: PdfSummaryType) {
+  const sql = await getDbConnection();
+  const [savedSummary] = await sql`INSERT INTO pdf_summaries (
+    user_id, original_file_url, summary_text, title, file_name
+  ) VALUES (${userId}, ${fileUrl}, ${summary}, ${title}, ${fileName})
+  RETURNING id, summary_text`;
+
+  return savedSummary;
+}
+
+export async function storePdfSummaryAction({ fileUrl, summary, title, fileName }: PdfSummaryType) {
   try {
     const { userId } = await auth();
-    if (!userId) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
-    savedSummary = await savePdfSummary({
-      userId,
-      fileUrl,
-      summary,
-      title,
-      fileName,
-    });
+    if (!userId) return { success: false, message: "User not authenticated" };
 
-    if (!savedSummary) {
-      return {
-        success: false,
-        message: "Failed to save pdf summary",
-      };
-    }
+    const savedSummary = await savePdfSummary({ userId, fileUrl, summary, title, fileName });
+    if (!savedSummary?.id) return { success: false, message: "Failed to save summary" };
+
+    revalidatePath(`/summaries/${savedSummary.id}`);
+    return { success: true, message: "Summary saved", data: { id: savedSummary.id } };
   } catch (error) {
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : "Error storing summary",
-    };
+    return { success: false, message: error instanceof Error ? error.message : "Error storing summary" };
   }
-  // redirect our cache
-  revalidatePath(`/summaries/${savedSummary.id}`);
-
-  return {
-    success: true,
-    message: "Pdf summary saved successfully",
-    data: {
-      id: savedSummary.id,
-    },
-  };
 }
