@@ -7,7 +7,6 @@ import { generateSummaryFromOpenAI } from "@/lib/openai";
 import { formatFileNameAsTitle } from "@/utils/format-utils";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { success } from "zod";
 
 interface pdfSummaryType {
   userId?: string;
@@ -17,30 +16,14 @@ interface pdfSummaryType {
   fileName: string;
 }
 
-export async function generatePdfSummary(
-  uploadResponse: [
-    {
-      serverData: {
-        userId: string;
-        file: {
-          url: string;
-          name: string;
-        };
-      };
-    }
-  ]
-) {
-  if (!uploadResponse) {
-    return { success: false, message: "File upload failed", data: null };
-  }
-  const {
-    serverData: {
-      userId,
-      file: { url: pdfUrl, name: fileName },
-    },
-  } = uploadResponse[0];
-
-  if (!pdfUrl) {
+export async function generatePdfText({
+  fileUrl,
+  
+}: {
+  fileUrl: string;
+ 
+}) {
+  if (!fileUrl) {
     return {
       success: false,
       message: "File URL is missing",
@@ -49,8 +32,40 @@ export async function generatePdfSummary(
   }
 
   try {
-    const pdfText = await fetchAndExtractPdfText(pdfUrl);
+    const pdfText = await fetchAndExtractPdfText(fileUrl);
     console.log({ pdfText });
+
+    if (!pdfText) {
+      return {
+        success: false,
+        message: "Failed to fetch adn extract PDF text",
+        data: null,
+      };
+    }
+    
+
+    return {
+      success: true,
+      message: "PDF text generated successfully",
+      data: { pdfText }
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to fetch and extract PDF text",
+      data: null,
+    };
+  }
+}
+
+export async function generatePdfSummary({
+  pdfText,
+  fileName,
+}: {
+  pdfText: string;
+  fileName: string;
+}) {
+  try {
     let summary;
     try {
       summary = await generateSummaryFromGeminiAI(pdfText); // loo
@@ -71,6 +86,7 @@ export async function generatePdfSummary(
         throw new Error("Both OpenAI and Gemini AI services failed.");
       }
     }
+    
     if (!summary) {
       return {
         success: false,
@@ -78,17 +94,17 @@ export async function generatePdfSummary(
         data: null,
       };
     }
-    const formattedFileName = formatFileNameAsTitle(fileName);
+
     // Add this return for success!
     return {
       success: true,
       message: "Summary generated successfully",
-      data: { title: formattedFileName, summary },
+      data: { title: fileName, summary },
     };
   } catch (error) {
     return {
       success: false,
-      message: "Error generating summary",
+      message: "Failed to generate summary",
       data: null,
     };
   }
@@ -115,7 +131,7 @@ async function savePdfSummary({
          ${title},
          ${fileName}
         ) RETURNING id, summary_text`;
-      return savedSummary;
+    return savedSummary;
   } catch (error) {
     console.error("Error saving PDF summary", error);
     throw error;
@@ -128,8 +144,7 @@ export async function storePdfSummaryAction({
   title,
   fileName,
 }: pdfSummaryType) {
-  
-  let savedSummary:any;
+  let savedSummary: any;
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -152,7 +167,6 @@ export async function storePdfSummaryAction({
         message: "Failed to save pdf summary",
       };
     }
-    
   } catch (error) {
     return {
       success: false,
@@ -163,11 +177,10 @@ export async function storePdfSummaryAction({
   revalidatePath(`/summaries/${savedSummary.id}`);
 
   return {
-      success: true,
-      message: "Pdf summary saved successfully",
-      data:{
-        id:savedSummary.id,
-      }
-    };
+    success: true,
+    message: "Pdf summary saved successfully",
+    data: {
+      id: savedSummary.id,
+    },
+  };
 }
-

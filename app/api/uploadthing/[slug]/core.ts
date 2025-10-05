@@ -13,12 +13,22 @@ export const ourFileRouter = {
 
       return { userId: user.id };
     })
-    .onUploadComplete(async ({ metadata, file }:any) => {
-      console.log("Upload completed for user id", metadata.userId);
-      console.log("File url", file.url);
-      return { userId: metadata.userId, file };
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload completed for user id:", metadata.userId);
+      console.log("File URL:", file.url);
+
+      // RETURN ONLY JSON-serializable data
+      return {
+        userId: metadata.userId,
+        file: {
+          url: file.url,
+          key: file.key,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+        },
+      };
     }),
 } satisfies FileRouter;
 
-// Rename your local type to avoid conflict
 export type OurFileRouter = typeof ourFileRouter;
