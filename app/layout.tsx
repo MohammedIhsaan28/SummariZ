@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Solar-AI",
   description: "Document Summarizer",
   icons:{
-    icon:'/public/icon.ico'
+    icon:'/icon.ico'
   },
   metadataBase: new URL(baseUrl),
   alternates: { canonical: baseUrl },
