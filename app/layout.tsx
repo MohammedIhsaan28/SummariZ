@@ -13,18 +13,22 @@ const fontSans = FontSans({
   weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
+// ✅ Ensure ORIGIN_URL is valid
+const baseUrl = ORIGIN_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
   title: "Solar-AI",
   description: "Document Summarizer",
+  metadataBase: new URL(baseUrl),
+  alternates: { canonical: baseUrl },
   openGraph: {
     images: [
       {
-        url: "/public/opengraph-image.png",
+        // Absolute URL for OG image
+        url: new URL("/opengraph-image.png", baseUrl).toString(),
       },
     ],
   },
-  metadataBase: new URL(ORIGIN_URL),
-  alternates: { canonical: ORIGIN_URL },
 };
 
 export default function RootLayout({
