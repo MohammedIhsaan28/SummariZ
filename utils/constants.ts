@@ -8,8 +8,8 @@ export const pricingPlans = [
     description: "Perfect for personal use",
     paymentLink: isDev
       ? "https://buy.stripe.com/test_7sYbJ054DgxQ4pq0E64sE00"
-      : "",
-    priceId: isDev ? "price_1SDfB5BS6WjN5QH1wVwRXma5" : "",
+      : "https://buy.stripe.com/test_7sYbJ054DgxQ4pq0E64sE00",
+    priceId: isDev ? "price_1SDfB5BS6WjN5QH1wVwRXma5" : "price_1SDfB5BS6WjN5QH1wVwRXma5",
     items: [
       "5 PDF summaries per month",
       "Standard processing speed",
@@ -23,8 +23,8 @@ export const pricingPlans = [
     description: "For professionals and teams",
     paymentLink: isDev
       ? "https://buy.stripe.com/test_bJe00icx56Xg3lmbiK4sE01"
-      : "",
-    priceId: isDev ? "price_1SDfC6BS6WjN5QH1qKdPPp8s" : "",
+      : "https://buy.stripe.com/test_bJe00icx56Xg3lmbiK4sE01",
+    priceId: isDev ? "price_1SDfC6BS6WjN5QH1qKdPPp8s" : "price_1SDfC6BS6WjN5QH1qKdPPp8s",
     items: [
       "Unlimited PDF summaries",
       "Priority processing",

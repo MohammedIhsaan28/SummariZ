@@ -19,6 +19,9 @@ const baseUrl = ORIGIN_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   title: "Solar-AI",
   description: "Document Summarizer",
+  icons:{
+    icon:'/public/icon.ico'
+  },
   metadataBase: new URL(baseUrl),
   alternates: { canonical: baseUrl },
   openGraph: {
