@@ -28,13 +28,13 @@ export default async function PlanBadges() {
       variant="outline"
       className={cn(
         "ml-2 bg-linear-to-r from-amber-100 to-amber-200 border border-amber-300 hidden lg:flex flex-row items-center",
-        !priceId && "from-red-100 to-red-200 border-red-300"
+        !priceId && "from-cyan-100 to-cyan-200 border-cyan-300"
       )}
     >
       <Crown
         className={cn(
-          "w-3 h-3 mr-1 text-amber-600",
-          !priceId && "text-rose-600"
+          "w-3 h-3 mr-1 text-teal-600",
+          !priceId && "text-cyan-600"
         )}
       />
       {planName}

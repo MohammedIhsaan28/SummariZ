@@ -8,34 +8,13 @@ import { itemVariants } from "@/utils/constants";
 
 function HeaderSkeleton() {
   return (
-    <div className="flex gap-4 mb-8 justify-between">
-      <div className="flex flex-col gap-2">
-        <MotionH1
-          variants={itemVariants}
-          initial="hidden"
-          whileInView="visible"
-          className="text-4xl font-bold tracking-tight bg-linear-to-r from-gray-600 to-gray-900 bg-clip-text text-transparent"
-        >
-          <Skeleton className="h-10 w-48" />
-        </MotionH1>
-        <MotionDiv
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="text-gray-600"
-        >
-          <Skeleton className="h-6 w-96" />
-        </MotionDiv>
-      </div>
-      <MotionDiv
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        className="self-start"
-      >
-        <Skeleton className="h-10 w-32" />
-      </MotionDiv>
-    </div>
+    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8 justify-between">
+  <div className="flex flex-col gap-2 sm:gap-3">
+    <Skeleton className="h-8 sm:h-10 w-40 sm:w-48 rounded-lg" />
+    <Skeleton className="h-5 sm:h-6 w-64 sm:w-96 rounded-lg" />
+  </div>
+  <Skeleton className="h-9 sm:h-10 w-28 sm:w-32 rounded-lg self-start" />
+</div>
   );
 }
 

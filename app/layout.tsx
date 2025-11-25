@@ -21,8 +21,8 @@ const fontSans = FontSans({
 const baseUrl = ORIGIN_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "Solar-AI",
-  description: "Document Summarizer",
+  title: "SummariZ",
+  description: "AI-Powered Document Summarizer",
   icons:{
     icon:'/favicon.ico'
   },

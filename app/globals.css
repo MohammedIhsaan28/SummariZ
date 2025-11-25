@@ -146,7 +146,7 @@
   }
 
   button {
-    @apply hover:cursor-pointer bg-rose-600 hover:bg-rose-700;
+    @apply hover:cursor-pointer bg-cyan-600 hover:bg-cyan-700;
   }
 
   @keyframes gradient-x {

@@ -57,7 +57,7 @@ export default function HowItWorksSection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="font-bold text-xl uppercase mb-4 text-rose-500"
+            className="font-bold text-xl uppercase mb-4 text-cyan-500"
           >
             How it works
           </MotionH2>
@@ -91,7 +91,7 @@ export default function HowItWorksSection() {
                   <MoveRight
                     size={32}
                     strokeWidth={1}
-                    className="text-red-400"
+                    className="text-cyan-400"
                   />
                 </MotionDiv>
               )}
@@ -106,16 +106,16 @@ export default function HowItWorksSection() {
     return (
       <div
         className="relative p-6 rounded-2xl bg-white/5
-        backdrop-blur-xs border border-white/10 hover:border-rose-500/50 
+        backdrop-blur-xs border border-white/10 hover:border-cyan-500/50 
         transition-colors group w-full"
       >
         <div className="flex flex-col gap-4 h-full">
           <div
             className="flex items-center justify-center h-24 w-24 
-                mx-auto rounded-2xl bg-linear-to-br from-rose-500/10 to-transparent 
-                group-hover:from-rose-500/20 transition-colors"
+                mx-auto rounded-2xl bg-linear-to-br from-cyan-500/10 to-transparent 
+                group-hover:from-cyan-500/20 transition-colors"
           >
-            <div className="text-rose-500">{icon}</div>
+            <div className="text-cyan-500">{icon}</div>
           </div>
           <div className="flex flex-col flex-1 gap-1 justify-between">
             <h4 className="text-center font-bold text-xl">{label}</h4>

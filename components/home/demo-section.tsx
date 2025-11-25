@@ -48,7 +48,7 @@ export default function DemoSection() {
             className="inline-flex items-center justify-center p-2 rounded-2xl bg-gray-100/80 
             backdrop-blur-xs border border-gray-500/20 mb-4"
           >
-            <Pizza className="h-6 w-6 text-rose-500" />
+            <Pizza className="h-6 w-6 text-cyan-500" />
           </div>
           <div className="text-center mb-16">
             <MotionH3
@@ -58,7 +58,7 @@ export default function DemoSection() {
               className="font-bold text-3xl max-w-2xl mx-auto px-4 sm:px-6"
             >
               Watch how Solar tranform{" "}
-              <span className="bg-linear-to-r from-rose-500 to-rose-700 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-cyan-500 to-cyan-700 bg-clip-text text-transparent">
                 the document
               </span>{" "}
               into an easy to read summary!

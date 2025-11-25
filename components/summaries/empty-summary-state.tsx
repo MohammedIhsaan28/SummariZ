@@ -10,7 +10,7 @@ export default function EmptySummaryState() {
         <h2 className="text-xl font-semibold text-gray-600">No summaries yet</h2>
         <p  className="text-gray-500 max-w-md">Upload your first PDF to get started with AI-powereed summaries.</p>
         <Link href="/upload">
-          <Button variant={'link'} className="mt-4 text-white bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:no-underline">Create Your First Summary</Button>
+          <Button variant={'link'} className="mt-4 text-white bg-linear-to-r from-cyan-500 to-cyan-700 hover:from-cyan-600 hover:to-cyan-800 hover:no-underline">Create Your First Summary</Button>
         </Link>
       </div>
     </div>
