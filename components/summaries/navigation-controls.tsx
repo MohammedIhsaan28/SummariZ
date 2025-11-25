@@ -36,7 +36,7 @@ export default function NavigationControls({
               key={index}
               onClick={() => onSectionSelect(index)}
               className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300 ",
+                "w-2 h-2 rounded-full transition-all duration-300 text-cyan-400",
                 currentSection === index
                   ? "bg-linear-to-r from-cyan-500 to-cyan-600"
                   : "bg-cyan-500/20 hover:bg-cyan-500/30"

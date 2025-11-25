@@ -64,7 +64,7 @@ export default async function DashboardPage() {
               >
                 <Button
                   variant={"link"}
-                  className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 transition-all duration-300 group hover:no-underline px-2"
+                  className="bg-linear-to-r from-cyan-500 to-cyan-700 hover:from-cyan-600 hover:to-cyan-800 hover:scale-105 transition-all duration-300 group hover:no-underline px-2"
                 >
                   <Link href="/upload" className="flex text-white items-center">
                     <Plus className="w-5 h-5 mr-2" /> New Summary
@@ -81,12 +81,12 @@ export default async function DashboardPage() {
               whileHover={{ scale: 1.05 }}
               className="mb-6"
             >
-              <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-rose-800">
+              <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4 text-cyan-800">
                 <p className="text-sm">
                   You've reached the limit of {uploadLimit} uploads on thr Basic
                   plan{" "}
                   <Link
-                    className="text-rose-800 underline font-medium underline-offset-4 inline-flex items-center"
+                    className="text-cyan-800 underline font-medium underline-offset-4 inline-flex items-center"
                     href="/#pricing"
                   >
                     Click here to upgrade to Pro{" "}
