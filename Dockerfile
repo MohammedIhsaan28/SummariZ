@@ -14,7 +14,7 @@ RUN if [ -f package-lock.json ]; then \
 COPY . .
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 3001
 
 # Start in production mode
 CMD ["npm", "start"]
