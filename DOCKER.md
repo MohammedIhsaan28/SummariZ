@@ -57,6 +57,15 @@ Notes & customization
 - The production `Dockerfile` runs `npm run build` and `npm start`. If you host on platforms with special requirements (e.g., Vercel, Fly), adapt accordingly.
 - `docker-compose.yml` provides a Postgres service for convenience; if you use Neon or other serverless DBs, remove the `db` service and set `DATABASE_URL` appropriately.
 
+Compatibility note (peer dependency conflicts)
+
+- This project currently has mixed dependency versions that may trigger npm peer-dependency resolution errors during `npm ci` or `npm install` (you may have seen `ERESOLVE` errors referencing `zod` and `@langchain/community`).
+- The provided `Dockerfile` uses `npm install --legacy-peer-deps` as a pragmatic workaround so builds complete inside Docker. For reproducible builds you should:
+  1. Run locally: `npm install --legacy-peer-deps`
+  2. Commit the resulting `package-lock.json` to the repo so Docker builds use the same lockfile and don't attempt to re-resolve deps.
+
+If you'd like, I can scan dependencies and propose an upgrade/downgrade plan to resolve the root cause instead of relying on `--legacy-peer-deps`.
+
 If you want, I can:
 
 - Add a `Makefile` or `scripts` to standardize Docker commands.
