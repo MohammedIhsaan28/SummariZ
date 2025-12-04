@@ -7,6 +7,5 @@ services:
       - .env.local
     environment:
       - NODE_ENV=production
+      - UPLOADTHING_APP_URL=http://host.docker.internal:3000
     restart: always
-
-    
