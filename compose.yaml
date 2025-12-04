@@ -2,11 +2,11 @@ services:
   summariz:
     build: .
     ports:
-      # bind host localhost:3001 to container port 3000 (Next.js default)
-      - "127.0.0.1:3001:3000"
+      - "3000:3000"
     env_file:
       - .env.local
     environment:
       - NODE_ENV=production
-      - PORT=3000
-    restart: unless-stopped
+    restart: always
+
+    
