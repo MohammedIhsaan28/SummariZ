@@ -1,13 +1,20 @@
-FROM node
+FROM node:20
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy package files and install deps (use legacy peer deps to avoid ERESOLVE during image build)
+COPY package.json package-lock.json* ./
+RUN if [ -f package-lock.json ]; then \
+			npm ci --prefer-offline --no-audit --progress=false || npm install --legacy-peer-deps --no-audit --progress=false; \
+		else \
+			npm install --legacy-peer-deps --no-audit --progress=false; \
+		fi
 
-RUN npm install 
-
+# Copy app sources and build
 COPY . .
+RUN npm run build
 
 EXPOSE 3000
 
-CMD npm run dev
+# Start in production mode
+CMD ["npm", "start"]
