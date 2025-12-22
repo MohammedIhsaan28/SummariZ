@@ -1,11 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 import { SUMMARY_SYSTEM_PROMPT } from "@/utils/prompts";
 
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error("Missing GEMINI_API_KEY in environment");
+if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+  throw new Error("Missing GOOGLE_GENERATIVE_AI_API_KEY in environment");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY! });
 
 export const generateSummaryFromGeminiAI = async (pdfText: string) => {
   try {
@@ -24,9 +24,10 @@ export const generateSummaryFromGeminiAI = async (pdfText: string) => {
     ];
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-pro",
+      model: "gemini-2.5-flash",
       contents,
       config: {
+        systemInstruction: "You are a helpful assistant that summarizes documents.",
         temperature: 0.7,
         maxOutputTokens: 1500,
       },
