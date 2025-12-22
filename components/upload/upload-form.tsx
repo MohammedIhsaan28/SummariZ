@@ -60,7 +60,7 @@ export default function UploadForm() {
       // Start UploadThing upload
       const uploadResponse:any = await startUpload([file]);
       const uploadFileUrl =
-        uploadResponse?.[0]?.serverData?.file?.url ||
+        uploadResponse?.[0]?.serverData?.file?.ufsUrl ||
         uploadResponse?.[0]?.serverData?.fileUrl;
 
       if (!uploadFileUrl) {

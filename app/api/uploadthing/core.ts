@@ -18,7 +18,7 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }:any) => {
       console.log("Upload completed for user id:", metadata.userId);
-      console.log("File URL:", file.url);
+      console.log("File URL:", file.ufsUrl);
 
       // You can trigger your AI or DB actions here
       // Example: await storePdfSummaryAction({ ... });
