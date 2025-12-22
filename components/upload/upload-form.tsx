@@ -17,8 +17,13 @@ import { formatFileNameAsTitle } from "@/utils/format-utils";
 const schema = z.object({
   file: z
     .instanceof(File, { message: "Invalid file" })
-    .refine((file) => file.size <= 20 * 1024 * 1024, "File size must be less than 20MB")
-    .refine((file) => file.type === "application/pdf", { message: "File must be a PDF" }),
+    .refine(
+      (file) => file.size <= 20 * 1024 * 1024,
+      "File size must be less than 20MB"
+    )
+    .refine((file) => file.type === "application/pdf", {
+      message: "File must be a PDF",
+    }),
 });
 
 export default function UploadForm() {
@@ -27,7 +32,9 @@ export default function UploadForm() {
   const router = useRouter();
 
   const { startUpload } = useUploadThing("pdfUploader", {
-    onClientUploadComplete: () => {toast.success("Uploaded successfully!")},
+    onClientUploadComplete: () => {
+      toast.success("Uploaded successfully!");
+    },
     onUploadError: (err) => {
       toast.error("Error occurred while uploading.");
       console.error("Upload error:", err);
@@ -53,18 +60,24 @@ export default function UploadForm() {
 
       const validated = schema.safeParse({ file });
       if (!validated.success) {
-        toast.error(validated.error.flatten().fieldErrors.file?.[0] ?? "Invalid file");
+        toast.error(
+          validated.error.flatten().fieldErrors.file?.[0] ?? "Invalid file"
+        );
         return;
       }
 
       // Start UploadThing upload
-      const uploadResponse:any = await startUpload([file]);
+      const uploadResponse: any = await startUpload([file]);
+      const uploadedFile = uploadResponse?.[0];
+
       const uploadFileUrl =
-        uploadResponse?.[0]?.serverData?.file?.ufsUrl ||
-        uploadResponse?.[0]?.serverData?.fileUrl;
+        uploadedFile?.url ||
+        uploadedFile?.serverData?.file?.ufsUrl ||
+        uploadedFile?.serverData?.fileUrl;
 
       if (!uploadFileUrl) {
-        toast.error("Upload failed. No file URL returned.");
+        console.error("UploadThing response:", uploadResponse);
+        toast.error("Upload failed. File URL missing.");
         return;
       }
 
@@ -118,20 +131,31 @@ export default function UploadForm() {
           <div className="w-full border-t border-gray-200 dark:border-gray-800" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-muted-foreground text-sm">Upload PDF</span>
+          <span className="bg-background px-3 text-muted-foreground text-sm">
+            Upload PDF
+          </span>
         </div>
       </div>
 
-      <UploadFormInput isLoading={isLoading} ref={formRef} onSubmit={handleSubmit} />
+      <UploadFormInput
+        isLoading={isLoading}
+        ref={formRef}
+        onSubmit={handleSubmit}
+      />
 
       {isLoading && (
         <>
           <div className="relative">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
               <div className="w-full border-t border-gray-200 dark:border-gray-800" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-background px-3 text-muted-foreground text-sm">Processing</span>
+              <span className="bg-background px-3 text-muted-foreground text-sm">
+                Processing
+              </span>
             </div>
           </div>
           <LoadingSkeleton />
